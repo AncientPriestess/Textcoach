@@ -177,5 +177,5 @@ if submit:
 
 # ========== 💎 Sidebar Promotion ==========
 st.sidebar.markdown("---")
-st.sidebar.markdown("💎 [Upgrade for unlimited access](https://your-gumroad-link.com)")
-st.sidebar.markdown("📩 Questions? hello@yourbrand.com")
+st.sidebar.markdown("🔓 **Need a code?** [Upgrade to unlock full access](https://your-gumroad-link.com)")
+st.sidebar.markdown("💬 Questions? [hello@yourbrand.com](mailto:hello@yourbrand.com)")
