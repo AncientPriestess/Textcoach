@@ -40,7 +40,6 @@ def analyze_text_and_generate_reply(text_input, is_thread=False):
     style_reference = """
 Respond in this format and tone:
 
-👑 Coach’s Response
 
 Red Flag(s):
 [Point out behaviors like breadcrumbing, vague language, avoidance of commitment, etc. Use bold, blunt language. Example: “‘Let’s not label this’ is code for wanting perks without responsibility.”]
