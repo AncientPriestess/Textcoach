@@ -53,7 +53,8 @@ if not ACCESS_GRANTED:
 # ========== Usage Tracking ==========
 def get_user_usage(user_email):
     try:
-        response = requests.get(f"{SHEET_API_URL}/search?email={user_email}&date={date.today()}")
+        today_str = datetime.now().strftime("%Y-%m-%d")
+        response = requests.get(f"{SHEET_API_URL}/search?email={user_email}&date={today_str}")
         if response.status_code == 200:
             data = response.json()
             if isinstance(data, list) and len(data) > 0:
@@ -61,6 +62,7 @@ def get_user_usage(user_email):
         return 0
     except:
         return 0
+
 
 def log_usage(user_email):
     try:
