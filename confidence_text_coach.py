@@ -171,8 +171,8 @@ if st.button("🔍 Analyze Message"):
     multiline = text_input.count('\n') > 2
 
     if not ACCESS_GRANTED and (looks_like_thread or multiline):
-        st.error("🚫 This looks like more than a single message. Full conversation analysis and context/backstory features are for premium users only. [Unlock full access](https://coachnofluff.gumroad.com/l/textcoach) to continue.")
-    elif ACCESS_GRANTED or within_limit:
+        st.error("🚫 This looks like more than a single message. Full conversation analysis and context features are for premium users only. [Unlock full access](https://coachnofluff.gumroad.com/l/textcoach) to continue.")
+    elif ACCESS_GRANTED or (user_email and email_is_valid(user_email) and get_user_usage(user_email) < 2):
         with st.spinner("Analyzing..."):
             result = analyze_text_and_generate_reply(
                 text_input, context_input, is_thread=(mode == "Full Conversation Thread")
@@ -180,7 +180,7 @@ if st.button("🔍 Analyze Message"):
             st.markdown("### 👑 Coach’s Response")
             st.write(result)
             if not ACCESS_GRANTED:
-                st.session_state.usage["count"] += 1
+                log_usage(user_email)
     else:
         st.error("You’ve reached your free limit today. Unlock full access to continue.")
         st.markdown("🔓 [Upgrade here for unlimited access](https://coachnofluff.gumroad.com/l/textcoach)")
