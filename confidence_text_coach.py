@@ -158,7 +158,7 @@ def is_thread_or_contextual_input(text):
     backstory_keywords = [
         "he said", "i told him", "we’ve been", "we were", "he was", "he did", "he told", "he used to",
         "i love", "he loves", "he stopped", "he started", "we talked", "he promised", "he acted", "i feel",
-        "i thought he", "then he","him", "because he", "he ghosted", "after that", "he responded", "ignored"
+        "i thought he", "then he","him", "because he", "he ghosted", "after that", "he responded", "he ignored", "his"
     ]
 
     # Sentence count check
@@ -174,7 +174,7 @@ if submit:
     if not user_email:
         st.error("Please enter your email to continue.")
     elif not ACCESS_GRANTED and is_thread_or_contextual_input(text_input):
-        st.error("🛑 This looks like a backstory or paraphrased input. Free version only supports direct messages. Upgrade for full context analysis.")
+        st.error("🛑 This looks like a backstory or paraphrased input. Free version only supports direct messages. [Upgrade for full context analysis.](https://coachnofluff.gumroad.com/l/textcoach)")
     elif not ACCESS_GRANTED and ("you:" in text_input.lower() or "him:" in text_input.lower() or text_input.count('\n') > 2):
         st.error("🛑 This looks like a thread. Upgrade for full conversation analysis.")
     elif can_analyze:
@@ -194,5 +194,5 @@ if submit:
 
 # ========== 💎 Sidebar Promotion ==========
 st.sidebar.markdown("---")
-st.sidebar.markdown("🔓 **Need a code?** [Upgrade to unlock full access](https://your-gumroad-link.com)")
-st.sidebar.markdown("💬 Questions? [hello@yourbrand.com](mailto:hello@yourbrand.com)")
+st.sidebar.markdown("🔓 **Need a code?** [Upgrade to unlock full access](https://coachnofluff.gumroad.com/l/textcoach)")
+st.sidebar.markdown("💬 Questions? [markwestoncoach@gmail.com](mailto:markwestoncoach@gmail.com)")
