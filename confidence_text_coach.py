@@ -140,7 +140,14 @@ Use the guide below and speak directly to her:
 
 # ========== ✅ Handle Submit ==========
 if st.button("🔍 Analyze Message"):
-    if ACCESS_GRANTED or within_limit:
+    # === Detect thread or backstory attempts for unpaid users ===
+    suspicious_phrases = ["you:", "him:", "her:", "me:", "\n\n", "context:", "backstory:", "sent at", "—", ":", "\n-"]
+    looks_like_thread = any(phrase.lower() in text_input.lower() for phrase in suspicious_phrases)
+    multiline = text_input.count('\n') > 2
+
+    if not ACCESS_GRANTED and (looks_like_thread or multiline):
+        st.error("🚫 This looks like more than a single message. Full conversation analysis and context/backstory features are for premium users only. [Unlock full access](https://your-gumroad-link.com) to continue.")
+    elif ACCESS_GRANTED or within_limit:
         with st.spinner("Analyzing..."):
             result = analyze_text_and_generate_reply(
                 text_input, context_input, is_thread=(mode == "Full Conversation Thread")
