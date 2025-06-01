@@ -47,8 +47,9 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ========== Sidebar UI ==========
-st.sidebar.title("🔐 Unlock Full Access")
+st.sidebar.title("Free Trial")
 user_email = st.sidebar.text_input("Your email (for 5 free uses - No code required):")
+st.sidebar.title("🔐 Unlock Full Access")
 password = st.sidebar.text_input("Got a code? Enter it here:", type="password")
 
 if st.sidebar.button("Activate Access"):
