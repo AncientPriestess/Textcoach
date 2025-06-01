@@ -67,9 +67,6 @@ with col1:
         index=0 if not ACCESS_GRANTED else None,
         help=None if ACCESS_GRANTED else "Upgrade to unlock full conversation analysis"
     )
-
-# ========== 📥 Message Input ==========
-text_input = st.text_area("📥 Message(s):", height=200)
 # ========== 📝 Optional Context ==========
 st.markdown("**📝 Optional Context / Backstory:**")
 
@@ -87,6 +84,9 @@ else:
         disabled=True
     )
     context_input = ""
+
+# ========== 📥 Message Input ==========
+text_input = st.text_area("📥 Message(s):", height=200)
 
 # ========== 🤖 AI Logic ==========
 def analyze_text_and_generate_reply(text_input, context_input="", is_thread=False):
