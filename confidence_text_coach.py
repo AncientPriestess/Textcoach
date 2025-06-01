@@ -3,13 +3,13 @@ import openai
 import requests
 from datetime import datetime, date
 
-# ✅ Secure your OpenAI Key and Access Code
+# ✅ Your OpenAI key
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
-# ✅ Your SheetDB URL (replace this)
-SHEET_API_URL = "https://sheetdb.io/api/v1/rmm73p10teqed"
+# ✅ Replace with your real SheetDB URL
+SHEET_API_URL = "https://sheetdb.io/api/v1/YOUR_SHEETDB_URL_HERE"
 
-# ========== 🔒 Premium Access ==========
+# ========== 🔐 Premium Access Control ==========
 st.sidebar.title("🔐 Unlock Full Access")
 
 if "access_granted" not in st.session_state:
@@ -35,7 +35,7 @@ else:
     st.sidebar.info("🔓 Free Version (2 daily attempts)")
     st.sidebar.markdown("💎 [Upgrade here](https://coachnofluff.gumroad.com/l/textcoach)")
 
-# ========== 📧 Email-Based Access for Free Users ==========
+# ========== 📧 Email for Free Users ==========
 user_email = ""
 email_required = False
 
@@ -51,7 +51,7 @@ if not ACCESS_GRANTED:
     if user_email and email_required:
         st.error("Please enter a valid email address.")
 
-# ========== 📊 SheetDB Usage Tracker ==========
+# ========== 🔁 SheetDB Usage Tracking ==========
 def get_user_usage(email):
     try:
         response = requests.get(f"{SHEET_API_URL}/search?email={email}&date={date.today()}")
@@ -85,7 +85,7 @@ st.title("❤️‍🔥 Text Coach for Women")
 st.caption("Decode his message. Protect your peace. Respond with confidence.")
 st.markdown("Paste the **message** below:")
 
-# ========== 👑 Message Type Selection ==========
+# ========== 🔍 Message Type ==========
 st.markdown("**🔍 Select Message Type:**")
 
 col1, col2 = st.columns(2)
@@ -98,7 +98,7 @@ with col1:
         help=None if ACCESS_GRANTED else "Upgrade to unlock full conversation analysis"
     )
 
-# ========== 📝 Context Field ==========
+# ========== 📝 Optional Context ==========
 st.markdown("**📝 Optional Context / Backstory:**")
 if ACCESS_GRANTED:
     context_input = st.text_area(
@@ -178,8 +178,11 @@ if st.button("🔍 Analyze Message"):
     looks_like_thread = any(phrase.lower() in text_input.lower() for phrase in suspicious_phrases)
     multiline = text_input.count('\n') > 2
 
+    # Cache usage at runtime
+    current_usage = get_user_usage(user_email) if user_email and not ACCESS_GRANTED else 0
+
     if not ACCESS_GRANTED and (looks_like_thread or multiline):
-        st.error("🚫 This looks like more than a single message. Full conversation analysis and context features are premium-only. [Unlock full access](https://coachnofluff.gumroad.com/l/textcoach)")
+        st.error("🚫 This looks like more than a single message. Full conversation and backstory features are for premium users. [Upgrade here](https://coachnofluff.gumroad.com/l/textcoach)")
     elif ACCESS_GRANTED:
         with st.spinner("Analyzing..."):
             result = analyze_text_and_generate_reply(
@@ -189,7 +192,7 @@ if st.button("🔍 Analyze Message"):
             st.write(result)
     elif not user_email or email_required:
         st.warning("📧 Please enter a valid email to use the free version.")
-    elif get_user_usage(user_email) >= 2:
+    elif current_usage >= 2:
         st.error("🚫 You've reached your daily free limit. [Upgrade here](https://coachnofluff.gumroad.com/l/textcoach) to continue.")
     else:
         with st.spinner("Analyzing..."):
@@ -204,5 +207,3 @@ if st.button("🔍 Analyze Message"):
 st.sidebar.markdown("---")
 st.sidebar.markdown("💎 [Upgrade for unlimited access](https://coachnofluff.gumroad.com/l/textcoach)")
 st.sidebar.markdown("📩 Questions? markwestoncoach@gmail.com")
-
-
