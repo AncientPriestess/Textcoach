@@ -3,7 +3,7 @@ import openai
 import requests
 from datetime import datetime, date
 
-# ✅ Your OpenAI key
+# ✅ OpenAI API Key
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # ✅ Replace with your SheetDB endpoint
@@ -26,7 +26,7 @@ if st.sidebar.button("Activate Access"):
 
 ACCESS_GRANTED = st.session_state.access_granted
 
-# Sidebar Info
+# Sidebar Status
 if ACCESS_GRANTED:
     st.sidebar.success("🌟 Premium Access Active")
     if st.sidebar.button("Cancel Membership"):
@@ -51,14 +51,15 @@ if not ACCESS_GRANTED:
     if user_email and email_required:
         st.error("Please enter a valid email address.")
 
-# ========== SheetDB Usage Tracking ==========
+# ========== Usage Tracker ==========
 def get_user_usage(email):
     try:
         response = requests.get(f"{SHEET_API_URL}/search?email={email}&date={date.today()}")
-        if response.status_code == 200 and response.json():
-            return int(response.json()[0].get("count", 0))
-        else:
-            return 0
+        if response.status_code == 200:
+            data = response.json()
+            if isinstance(data, list) and len(data) > 0:
+                return int(data[0].get("count", 0))
+        return 0
     except:
         return 0
 
@@ -68,12 +69,10 @@ def log_usage(email):
         headers = {"Content-Type": "application/json"}
 
         if usage == 0:
-            st.write("🆕 Creating new usage record")
             requests.post(SHEET_API_URL, json={
                 "data": {"email": email, "date": str(date.today()), "count": 1}
             }, headers=headers)
         else:
-            st.write("♻️ Updating usage count to", usage + 1)
             requests.patch(f"{SHEET_API_URL}/search", json={
                 "data": {
                     "email": email,
@@ -84,15 +83,13 @@ def log_usage(email):
     except Exception as e:
         st.write("❌ Logging error:", e)
 
-
-# ========== App UI ==========
+# ========== UI ==========
 st.title("❤️‍🔥 Text Coach for Women")
 st.caption("Decode his message. Protect your peace. Respond with confidence.")
 st.markdown("Paste the **message** below:")
 
-# ========== Message Mode ==========
+# ========== Message Type ==========
 st.markdown("**🔍 Select Message Type:**")
-
 col1, col2 = st.columns(2)
 with col1:
     mode = st.radio(
@@ -148,10 +145,7 @@ Final Word:
 
     prompt_header = f"You're a sharp male dating coach with big brother energy. A woman has shared a {'text thread' if is_thread else 'single message'} and wants your insight.\n\n"
 
-    if context_input.strip():
-        prompt_context = f"Here’s the backstory/context she provided:\n{context_input.strip()}\n\n"
-    else:
-        prompt_context = ""
+    prompt_context = f"Here’s the backstory/context she provided:\n{context_input.strip()}\n\n" if context_input.strip() else ""
 
     full_prompt = f"""
 {prompt_header}
@@ -177,14 +171,14 @@ Use the format and tone below to respond directly to her — no fluff, just clar
 
     return response.choices[0].message.content
 
-# ========== Analyze Button Logic ==========
+# ========== Analyze Button ==========
 if st.button("🔍 Analyze Message"):
     suspicious_phrases = ["you:", "him:", "her:", "me:", "\n\n", "context:", "backstory:", "sent at", "—", ":", "\n-"]
     looks_like_thread = any(phrase.lower() in text_input.lower() for phrase in suspicious_phrases)
     multiline = text_input.count('\n') > 2
     is_thread_attempt = looks_like_thread or multiline
 
-    # 🔓 FREE USER FLOW
+    # FREE USER FLOW
     if not ACCESS_GRANTED:
         if not user_email or email_required:
             st.warning("📧 Please enter a valid email to use the free version.")
@@ -194,7 +188,7 @@ if st.button("🔍 Analyze Message"):
             if current_usage >= 2:
                 st.error("🚫 You've reached your daily free limit. [Upgrade here](https://coachnofluff.gumroad.com/l/textcoach) to continue.")
             elif is_thread_attempt:
-                st.error("🚫 This looks like more than a single message. Full conversation and backstory analysis are for premium users only. [Upgrade here](https://coachnofluff.gumroad.com/l/textcoach)")
+                st.error("🚫 This looks like more than a single message. Full conversation and backstory analysis are premium features. [Upgrade here](https://coachnofluff.gumroad.com/l/textcoach)")
             else:
                 with st.spinner("Analyzing..."):
                     result = analyze_text_and_generate_reply(
@@ -204,7 +198,7 @@ if st.button("🔍 Analyze Message"):
                     st.write(result)
                     log_usage(user_email)
 
-    # 🔐 PAID USER FLOW
+    # PREMIUM USER FLOW
     else:
         with st.spinner("Analyzing..."):
             result = analyze_text_and_generate_reply(
