@@ -10,6 +10,16 @@ st.sidebar.title("🔐 Unlock Full Access")
 password = st.sidebar.text_input("Enter access code", type="password")
 ACCESS_GRANTED = (password == st.secrets["ACCESS_CODE"])
 
+# 🔄 Access Status Indicator + Cancel Prompt
+if ACCESS_GRANTED:
+    st.sidebar.success("🌟 Premium Access Active")
+    if st.sidebar.button("Cancel Membership"):
+        st.sidebar.warning("To cancel, email hello@yourbrand.com.")
+else:
+    st.sidebar.info("🔓 Free Version (2 daily attempts)")
+    if "usage" in st.session_state:
+        remaining = max(0, 2 - st.session_state.usage.get("count", 0))
+        st.sidebar.write(f"Free attempts left today: {remaining}")
 
 # ========== 🧮 Daily Limit for Free Users ==========
 if "usage" not in st.session_state:
@@ -40,7 +50,6 @@ text_input = st.text_area("📥 Message(s):", height=200)
 def analyze_text_and_generate_reply(text_input, is_thread=False):
     style_reference = """
 Respond in this format and tone:
-
 
 Red Flag(s):
 [Point out behaviors like breadcrumbing, vague language, avoidance of commitment, etc. Use bold, blunt language. Example: “‘Let’s not label this’ is code for wanting perks without responsibility.”]
@@ -89,6 +98,7 @@ Decode his behavior using the style guide below. Speak directly to her. Don’t 
     )
 
     return response.choices[0].message.content
+
 # ========== ✅ Handle Submit ==========
 if st.button("🔍 Analyze Message"):
     if ACCESS_GRANTED or within_limit:
@@ -106,3 +116,4 @@ if st.button("🔍 Analyze Message"):
 st.sidebar.markdown("---")
 st.sidebar.markdown("💎 [Upgrade for unlimited access](https://your-gumroad-link.com)")
 st.sidebar.markdown("📩 Questions? hello@yourbrand.com")
+
