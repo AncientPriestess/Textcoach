@@ -59,6 +59,22 @@ st.markdown("Paste the **message or full thread** below:")
 mode = st.radio("Is this a single message or full conversation?", ["Single Message", "Full Conversation Thread"])
 text_input = st.text_area("📥 Message(s):", height=200)
 
+# ✅ Only allow "Full Conversation" mode for access members
+if ACCESS_GRANTED:
+    mode = st.radio("Is this a single message or full conversation?", ["Single Message", "Full Conversation Thread"])
+else:
+    mode = "Single Message"
+    st.warning("🛑 Full conversation analysis is for premium users only. Unlock access to use this feature.")
+
+# 📥 Message input
+text_input = st.text_area("📥 Message(s):", height=200)
+
+# ✅ Optional backstory (only for access members)
+if ACCESS_GRANTED:
+    context_input = st.text_area("📝 Optional Context / Backstory (optional but helpful):", height=100)
+else:
+    context_input = ""
+    
 # ========== 🤖 AI Logic ==========
 def analyze_text_and_generate_reply(text_input, is_thread=False):
     style_reference = """
