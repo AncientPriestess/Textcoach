@@ -86,7 +86,7 @@ else:
     context_input = ""
 
 # ========== 📥 Message Input ==========
-text_input = st.text_area("📥 Message(s):", height=200)
+text_input = st.text_area("📥 Type/paste his message(s) below:", height=200)
 
 # ========== 🤖 AI Logic ==========
 def analyze_text_and_generate_reply(text_input, context_input="", is_thread=False):
