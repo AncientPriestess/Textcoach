@@ -53,11 +53,7 @@ within_limit = st.session_state.usage["count"] < MAX_FREE_USES
 # ========== 💬 App UI ==========
 st.title("❤️‍🔥 Text Coach for Women")
 st.caption("Decode his message. Protect your peace. Respond with confidence.")
-
-st.markdown("Paste the **message or full thread** below:")
-
-mode = st.radio("Is this a single message or full conversation?", ["Single Message", "Full Conversation Thread"])
-text_input = st.text_area("📥 Message(s):", height=200)
+st.markdown("Paste the **message** below:")
 
 # ✅ Only allow "Full Conversation" mode for access members
 if ACCESS_GRANTED:
@@ -74,8 +70,9 @@ if ACCESS_GRANTED:
     context_input = st.text_area("📝 Optional Context / Backstory (optional but helpful):", height=100)
 else:
     context_input = ""
-    
+
 # ========== 🤖 AI Logic ==========
+
 def analyze_text_and_generate_reply(text_input, is_thread=False):
     style_reference = """
 Respond in this format and tone:
