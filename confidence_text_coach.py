@@ -43,15 +43,21 @@ st.markdown("""
     .stRadio>div>div>label {
         font-weight: 500;
     }
-            .valid-input input {
-    border: 2px solid #10b981 !important;
-    background-image: url(...checkmark svg...);
-    ...
+.valid-input input {
+    border: 2px solid #10b981 !important;       /* Green border for success */
+    background-color: #ffffff !important;        /* Ensure background is clean */
+    background-image: none !important;           /* Remove checkmark */
+    box-shadow: none !important;
 }
+
 .success-note {
     font-size: 0.85rem;
-    color: #10b981;
-    margin-top: 0.25rem;
+    background-color: #10b981;                  /* Green background */
+    color: white;                                /* White text */
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+}
 }
 </style>
 """, unsafe_allow_html=True)
