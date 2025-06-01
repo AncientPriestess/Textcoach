@@ -1,11 +1,9 @@
 import streamlit as st
 import openai
 from datetime import datetime
+SHEET_API_URL = "https://sheetdb.io/api/v1/rmm73p10teqed"  # Use your actual endpoint
 
-# ✅ Set your OpenAI API key securely (configured in Hugging Face Secrets)
-openai.api_key = st.secrets["OPENAI_API_KEY"]
-
-# ========== 🔒 Access Control ==========
+# ========== 🔒 Premium Access Control ==========
 st.sidebar.title("🔐 Unlock Full Access")
 
 if "access_granted" not in st.session_state:
@@ -22,40 +20,58 @@ if st.sidebar.button("Activate Access"):
 
 ACCESS_GRANTED = st.session_state.access_granted
 
-
-# 🔄 Access Status Indicator + Cancel Prompt
+# 🔄 Access Status Display
 if ACCESS_GRANTED:
     st.sidebar.success("🌟 Premium Access Active")
     if st.sidebar.button("Cancel Membership"):
         st.sidebar.warning("To cancel, email markwestoncoach@gmail.com")
 else:
     st.sidebar.info("🔓 Free Version (2 daily attempts)")
-    if "usage" in st.session_state:
-        remaining = max(0, 2 - st.session_state.usage.get("count", 0))
-        st.sidebar.write(f"Free attempts left today: {remaining}")
+    st.sidebar.markdown("💎 [Upgrade here](https://coachnofluff.gumroad.com/l/textcoach)")
 
-# ========== 🧮 Daily Limit for Free Users ==========
-if "usage" not in st.session_state:
-    st.session_state.usage = {
-        "date": datetime.now().date(),
-        "count": 0
-    }
+# ========== 📧 Email Login for Free Users ==========
+user_email = ""
+if not ACCESS_GRANTED:
+    st.markdown("**📧 Enter your email to use the free version (required):**")
+    user_email = st.text_input("Email address", key="email_input")
 
-if st.session_state.usage["date"] != datetime.now().date():
-    st.session_state.usage = {
-        "date": datetime.now().date(),
-        "count": 0
-    }
+    def email_is_valid(email):
+        return "@" in email and "." in email
 
-MAX_FREE_USES = 2
-within_limit = st.session_state.usage["count"] < MAX_FREE_USES
+    if user_email and not email_is_valid(user_email):
+        st.error("Please enter a valid email address.")
+
+# ========== 🔁 Email-Based Usage Tracking ==========
+def get_user_usage(email):
+    try:
+        response = requests.get(f"{SHEET_API_URL}/search?email={email}&date={date.today()}")
+        if response.status_code == 200 and response.json():
+            return int(response.json()[0].get("count", 0))
+        else:
+            return 0
+    except:
+        return 0
+
+def log_usage(email):
+    try:
+        usage = get_user_usage(email)
+        if usage == 0:
+            requests.post(SHEET_API_URL, json={
+                "data": {"email": email, "date": str(date.today()), "count": 1}
+            })
+        else:
+            record = requests.get(f"{SHEET_API_URL}/search?email={email}&date={date.today()}").json()[0]
+            record_id = record["id"]
+            requests.patch(f"{SHEET_API_URL}/id/{record_id}", json={"data": {"count": usage + 1}})
+    except Exception as e:
+        print("Logging failed:", e)
 
 # ========== 💬 App UI ==========
 st.title("❤️‍🔥 Text Coach for Women")
 st.caption("Decode his message. Protect your peace. Respond with confidence.")
 st.markdown("Paste the **message** below:")
 
-# ========== 👑 Message Mode Selection ==========
+# ========== 👑 Message Type Selection ==========
 st.markdown("**🔍 Select Message Type:**")
 
 col1, col2 = st.columns(2)
@@ -67,6 +83,10 @@ with col1:
         index=0 if not ACCESS_GRANTED else None,
         help=None if ACCESS_GRANTED else "Upgrade to unlock full conversation analysis"
     )
+
+# ✅ Set your OpenAI API key securely (configured in Hugging Face Secrets)
+openai.api_key = st.secrets["OPENAI_API_KEY"]
+
     # ========== 📝 Optional Context ==========
 st.markdown("📝 Optional Context / Backstory:")
 if ACCESS_GRANTED:
@@ -141,6 +161,7 @@ Use the format and tone below to respond directly to her — no fluff, just clar
     )
 
     return response.choices[0].message.content
+
 
 # ========== ✅ Handle Submit ==========
 if st.button("🔍 Analyze Message"):
