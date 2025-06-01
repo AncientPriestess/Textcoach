@@ -12,10 +12,10 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 st.sidebar.title("🔐 Unlock Full Access")
 
 # Email capture
-user_email = st.sidebar.text_input("Enter your email to continue:")
+user_email = st.sidebar.text_input("Your email (for 2 free uses):")
 
 # Unlock code input
-password = st.sidebar.text_input("Have a code? Enter it here:", type="password")
+password = st.sidebar.text_input("Got a code? Enter here:", type="password")
 if st.sidebar.button("Activate Access"):
     if password == st.secrets["ACCESS_CODE"]:
         st.session_state.access_granted = True
@@ -35,6 +35,17 @@ def log_usage(email, current_count):
     requests.delete(f"{SHEETDB_ENDPOINT}/email/{email}")
     new_payload = {"data": [{"email": email, "count": current_count + 1}]}
     requests.post(SHEETDB_ENDPOINT, json=new_payload)
+
+# Check if user can analyze
+can_analyze = False
+usage = get_usage(user_email) if user_email else None
+if user_email:
+    if ACCESS_GRANTED:
+        can_analyze = True
+    elif not usage:
+        can_analyze = True
+    elif int(usage["count"]) < 2:
+        can_analyze = True
 
 # ========== AI Logic ==========
 def analyze_text_and_generate_reply(text_input, context_input="", is_thread=False):
@@ -56,10 +67,7 @@ Final Word:
 '''
 
     prompt_header = f"You’re a sharp male dating coach with big brother energy. A woman has shared a {'text thread' if is_thread else 'single message'} and wants your insight.\n\n"
-    if context_input.strip():
-        prompt_context = f"Here’s the backstory/context she provided:\n{context_input.strip()}\n\n"
-    else:
-        prompt_context = ""
+    prompt_context = f"Here’s the backstory/context she provided:\n{context_input.strip()}\n\n" if context_input.strip() else ""
 
     full_prompt = f"""
 {prompt_header}
@@ -84,65 +92,52 @@ Use the format and tone below to respond directly to her — no fluff, just clar
     )
     return response.choices[0].message.content
 
-# Check if user can analyze
-can_analyze = False
-if user_email:
-    usage = get_usage(user_email)
-    if ACCESS_GRANTED:
-        can_analyze = True
-    elif not usage:
-        can_analyze = True
-    elif int(usage["count"]) < 2:
-        can_analyze = True
-    else:
-        st.error("🛑 You've reached your 2 free attempts. [Upgrade for unlimited access](https://coachnofluff.gumroad.com/l/textcoach)")
-
 # ========== UI ========== 
-st.title("❤️‍🔥 Text Coach for Women")
-st.caption("Decode his message. Protect your peace. Respond with confidence.")
-st.markdown("Paste the **message** below:")
+st.title("❤️‍🔥 Text Coach")
+st.caption("Decode his message. Respond with confidence. Protect your peace.")
 
+st.markdown("### 🧠 What’s going on?")
+text_input = st.text_area("Paste *his* message here:", height=150)
+
+st.markdown("### 📁 Message Type")
 col1, col2 = st.columns(2)
 with col1:
     mode = st.radio(
-        "Choose format:",
-        ["Single Message", "Full Conversation Thread"],
+        "", ["Single Message", "Full Conversation Thread"],
         disabled=not ACCESS_GRANTED,
         index=0 if not ACCESS_GRANTED else None,
         help=None if ACCESS_GRANTED else "Upgrade to unlock full conversation analysis"
     )
 
-st.markdown("📝 Optional Context / Backstory:")
+st.markdown("### 📝 Extra Context (optional)")
 if ACCESS_GRANTED:
     context_input = st.text_area(
-        label="",
-        placeholder="Add any relevant context (e.g. how long you've been seeing him, recent arguments, etc.)",
+        label="", placeholder="(Only if it helps: how long you’ve been talking, last convo, etc.)",
         height=100
     )
 else:
     st.text_area(
-        label="",
-        placeholder="🔐 Upgrade to unlock this field and share more details that make your analysis even sharper.",
-        height=100,
-        disabled=True
+        label="", placeholder="🔒 Premium feature. Upgrade to unlock this field.",
+        height=100, disabled=True
     )
     context_input = ""
 
-text_input = st.text_area("🛅 Type/paste his message(s) below:", height=200)
-
-# ========== Detect Thread Abuse ==========
+# ========== Detect Sneaky Threads ==========
 suspicious_phrases = ["you:", "him:", "her:", "me:", "\n\n", "context:", "backstory:", "sent at", "—", ":", "\n-"]
 looks_like_thread = any(phrase.lower() in text_input.lower() for phrase in suspicious_phrases)
 multiline = text_input.count('\n') > 2
 
-# ========== Analyze Button ==========
+# ========== Analyze Message Button ==========
+error_placeholder = st.empty()
 if st.button("🔍 Analyze Message"):
     if not user_email:
-        st.error("Please enter your email to continue.")
+        error_placeholder.error("Please enter your email to get started.")
     elif not ACCESS_GRANTED and (looks_like_thread or multiline):
-        st.error("🛑 This looks like more than a single message. Full conversation analysis and context/backstory are premium features. [Upgrade here](https://coachnofluff.gumroad.com/l/textcoach)")
-    elif can_analyze:
-        with st.spinner("Analyzing..."):
+        error_placeholder.error("🛑 Looks like you’re trying to sneak in a thread. Full convos & backstories are for premium only. [Upgrade here](https://coachnofluff.gumroad.com/l/textcoach)")
+    elif not can_analyze:
+        error_placeholder.error("🛑 You’ve used both free attempts. [Upgrade for unlimited access](https://coachnofluff.gumroad.com/l/textcoach)")
+    else:
+        with st.spinner("Thinking like a coach..."):
             result = analyze_text_and_generate_reply(
                 text_input,
                 context_input,
@@ -152,3 +147,8 @@ if st.button("🔍 Analyze Message"):
             st.write(result)
             if not ACCESS_GRANTED:
                 log_usage(user_email, int(usage["count"]) if usage else 0)
+
+# ========== Sidebar Promo ==========
+st.sidebar.markdown("---")
+st.sidebar.markdown("💎 [Upgrade for unlimited access](https://coachnofluff.gumroad.com/l/textcoach)")
+st.sidebar.markdown("📩 Questions? markwestoncoach@gmail.com")
