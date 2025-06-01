@@ -174,4 +174,7 @@ if submit:
         st.error(st.session_state.analysis_error)
 
 
-
+# ========== 💎 Sidebar Promotion ==========
+st.sidebar.markdown("---")
+st.sidebar.markdown("💎 [Upgrade for unlimited access](https://your-gumroad-link.com)")
+st.sidebar.markdown("📩 Questions? hello@yourbrand.com")
