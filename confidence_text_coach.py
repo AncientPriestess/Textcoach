@@ -27,6 +27,25 @@ st.markdown("""
         font-size: 0.95rem !important;
         box-shadow: none !important;
     }
+    input:focus,
+textarea:focus {
+    border: 2px solid #2563eb !important; /* Your standard blue highlight */
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+input:focus:invalid,
+textarea:focus:invalid {
+    border: 1px solid #cbd5e1 !important;  /* Neutral fallback, NOT red */
+    box-shadow: none !important;
+}
+
+input:invalid,
+textarea:invalid {
+    border: 1px solid #cbd5e1 !important;  /* Removes red error border */
+    box-shadow: none !important;
+}
+
     .stButton>button {
         background-color: #3b82f6 !important;
         color: white !important;
