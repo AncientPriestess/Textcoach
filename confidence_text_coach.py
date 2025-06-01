@@ -67,7 +67,7 @@ Speak directly to her, not about her. Make it clear, empowering, and short.
 """
 
     response = openai.chat.completions.create(
-        model="gpt-4-turbo",
+        model="gpt-4o",
         messages=[
             {"role": "system", "content": "You are a seasoned male dating coach who protects women from emotional manipulation and teaches them how to respond like queens."},
             {"role": "user", "content": prompt}
