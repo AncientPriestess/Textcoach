@@ -68,17 +68,18 @@ def log_usage(email):
         headers = {"Content-Type": "application/json"}
 
         if usage == 0:
+            st.write("🆕 Creating new usage record")
             requests.post(SHEET_API_URL, json={
                 "data": {"email": email, "date": str(date.today()), "count": 1}
             }, headers=headers)
         else:
-            record = requests.get(f"{SHEET_API_URL}/search?email={email}&date={date.today()}").json()[0]
-            record_id = record["id"]
-            requests.patch(f"{SHEET_API_URL}/id/{record_id}", json={
-                "data": {"count": usage + 1}
+            st.write("♻️ Updating existing usage count")
+            requests.patch(f"{SHEET_API_URL}/search", json={
+                "data": {"email": email, "date": str(date.today()), "count": usage + 1}
             }, headers=headers)
     except Exception as e:
-        st.error(f"Logging error: {e}")
+        st.write("❌ Logging error:", e)
+
 
 # ========== App UI ==========
 st.title("❤️‍🔥 Text Coach for Women")
