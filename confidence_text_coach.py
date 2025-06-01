@@ -11,50 +11,46 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 # ========== App Style Settings ==========
 st.set_page_config(layout="centered", page_title="Text Coach for Women", page_icon="❤️‍🔥")
 
-# Inject custom CSS for theme overrides
+# Inject custom CSS for modern card-style UI
 st.markdown("""
 <style>
-    html, body, [class*="css"]  {
-        background-color: #f0f4f8 !important;
+    html, body, [class*="css"] {
+        background-color: #f3f6fb !important;
         font-family: 'Segoe UI', sans-serif;
         color: #1e2a38;
     }
-    .stTextArea textarea {
-        background-color: #eaf0f6 !important;
-        border-radius: 8px;
-        padding: 0.75rem;
-        font-size: 0.95rem;
+    .stTextArea textarea, .stTextInput input {
+        background-color: #ffffff !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 10px !important;
+        padding: 0.75rem !important;
+        font-size: 0.95rem !important;
+        box-shadow: none !important;
     }
     .stButton>button {
-        background-color: #2563eb !important;
+        background-color: #3b82f6 !important;
         color: white !important;
-        border-radius: 8px;
-        height: 2.5rem;
+        border-radius: 10px !important;
+        height: 2.5rem !important;
+        font-weight: bold;
     }
     .stButton>button:hover {
-        background-color: #1d4ed8 !important;
-        color: white !important;
+        background-color: #2563eb !important;
     }
     .stSidebar, .st-bp, .css-6qob1r, .block-container {
-        background-color: #edf2fa !important;
+        background-color: #e9eff8 !important;
     }
     .stRadio>div>div>label {
-        color: #1e2a38 !important;
         font-weight: 500;
     }
-    .css-1v0mbdj.e115fcil2 { padding-top: 1rem; }
-    .css-1dp5vir.e16nr0p34 { padding-top: 0; padding-bottom: 0; }
 </style>
 """, unsafe_allow_html=True)
 
 # ========== Sidebar UI ==========
 st.sidebar.title("🔐 Unlock Full Access")
-
-# Email capture
 user_email = st.sidebar.text_input("Your email (for 2 free uses):")
-
-# Unlock code input
 password = st.sidebar.text_input("Got a code? Enter it here:", type="password")
+
 if st.sidebar.button("Activate Access"):
     if password == st.secrets["ACCESS_CODE"]:
         st.session_state.access_granted = True
@@ -87,21 +83,19 @@ if user_email:
     else:
         st.session_state.analysis_error = "🛑 You've reached your 2 free attempts. [Upgrade for unlimited access](https://coachnofluff.gumroad.com/l/textcoach)"
 
-# ========== Main UI ========== 
+# ========== Main UI ==========
 st.title("❤️‍🔥 Text Coach for Women")
 st.caption("Decode his message. Protect your peace. Respond with confidence.")
 
 st.markdown("**Paste the message below:**")
 
-col1, col2 = st.columns([1, 1])
-with col1:
-    mode = st.radio(
-        "Choose format:",
-        ["Single Message", "Full Conversation Thread"],
-        disabled=not ACCESS_GRANTED,
-        index=0 if not ACCESS_GRANTED else None,
-        help=None if ACCESS_GRANTED else "Upgrade to unlock full conversation analysis"
-    )
+mode = st.radio(
+    "Choose format:",
+    ["Single Message", "Full Conversation Thread"],
+    disabled=not ACCESS_GRANTED,
+    index=0 if not ACCESS_GRANTED else None,
+    horizontal=True
+)
 
 st.markdown("**📋 Optional Context / Backstory:**")
 if ACCESS_GRANTED:
@@ -156,7 +150,8 @@ Use the format and tone below to respond directly to her — no fluff, just clar
         ],
     )
     return response.choices[0].message.content
-# Analyze button and error placement
+
+
 submit = st.button("🔍 Analyze Message")
 
 if submit:
@@ -177,5 +172,6 @@ if submit:
                 log_usage(user_email, int(usage["count"]) if usage else 0)
     elif "analysis_error" in st.session_state:
         st.error(st.session_state.analysis_error)
+
 
 
