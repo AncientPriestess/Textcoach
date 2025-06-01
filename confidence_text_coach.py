@@ -43,12 +43,32 @@ st.markdown("""
     .stRadio>div>div>label {
         font-weight: 500;
     }
+            .valid-input input {
+    border: 2px solid #10b981 !important;
+    background-image: url(...checkmark svg...);
+    ...
+}
+.success-note {
+    font-size: 0.85rem;
+    color: #10b981;
+    margin-top: 0.25rem;
+}
 </style>
 """, unsafe_allow_html=True)
 
 # ========== Sidebar UI ==========
 st.sidebar.title("Free Trial")
 user_email = st.sidebar.text_input("Enter your email (for 5 free uses - No code required):")
+
+# Validate email visually
+if user_email and "@" in user_email and "." in user_email:
+    st.sidebar.markdown(
+        f"""<div class='valid-input'>{user_email}</div>
+        <div class='success-note'>✅ You're good to go — paste the message below to get started.</div>""",
+        unsafe_allow_html=True
+    )
+
+
 st.sidebar.title("🔐 Unlock Full Access")
 password = st.sidebar.text_input("Got a code? Enter it here:", type="password")
 
@@ -196,3 +216,4 @@ if submit:
 st.sidebar.markdown("---")
 st.sidebar.markdown("🔓 **Need a code?** [Upgrade to unlock full access](https://coachnofluff.gumroad.com/l/textcoach)")
 st.sidebar.markdown("💬 Questions? [markwestoncoach@gmail.com](mailto:markwestoncoach@gmail.com)")
+
