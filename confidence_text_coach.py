@@ -7,8 +7,21 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # ========== 🔒 Access Control ==========
 st.sidebar.title("🔐 Unlock Full Access")
+
+if "access_granted" not in st.session_state:
+    st.session_state.access_granted = False
+
 password = st.sidebar.text_input("Enter access code", type="password")
-ACCESS_GRANTED = (password == st.secrets["ACCESS_CODE"])
+
+if st.sidebar.button("Activate Access"):
+    if password == st.secrets["ACCESS_CODE"]:
+        st.session_state.access_granted = True
+        st.sidebar.success("✅ Access granted! You’re now in Premium Mode.")
+    else:
+        st.sidebar.error("❌ Invalid code. Try again.")
+
+ACCESS_GRANTED = st.session_state.access_granted
+
 
 # 🔄 Access Status Indicator + Cancel Prompt
 if ACCESS_GRANTED:
