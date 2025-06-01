@@ -66,7 +66,8 @@ def log_usage(user_email):
     try:
         current_usage = get_user_usage(user_email)
         headers = {"Content-Type": "application/json"}
-        today_str = str(date.today())
+           # ✅ Use consistent date format to prevent serial number issue
+        today_str = datetime.now().strftime("%Y-%m-%d")
 
         if current_usage == 0:
             requests.post(SHEET_API_URL, json={
