@@ -66,7 +66,6 @@ def get_user_usage(user_email):
 
 def log_usage(user_email):
     try:
-        # ✅ Use consistent date format to prevent serial number issue
         today_str = datetime.now().strftime("%Y-%m-%d")
         current_usage = get_user_usage(user_email)
         headers = {"Content-Type": "application/json"}
@@ -76,13 +75,14 @@ def log_usage(user_email):
                 "data": {"email": user_email, "date": today_str, "count": 1}
             }, headers=headers)
         else:
-            requests.patch(f"{SHEET_API_URL}/search", json={
+            # ✅ Ensure proper matching using search_by=columns
+            requests.patch(f"{SHEET_API_URL}/search?search_by=columns", json={
                 "data": {"count": current_usage + 1},
                 "search": {"email": user_email, "date": today_str}
             }, headers=headers)
     except Exception as e:
         st.write("❌ Logging error:", e)
-
+        
 # ========== UI ==========
 st.title("❤️‍🔥 Text Coach for Women")
 st.caption("Decode his message. Protect your peace. Respond with confidence.")
