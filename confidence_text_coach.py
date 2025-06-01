@@ -73,9 +73,13 @@ def log_usage(email):
                 "data": {"email": email, "date": str(date.today()), "count": 1}
             }, headers=headers)
         else:
-            st.write("♻️ Updating existing usage count")
+            st.write("♻️ Updating usage count to", usage + 1)
             requests.patch(f"{SHEET_API_URL}/search", json={
-                "data": {"email": email, "date": str(date.today()), "count": usage + 1}
+                "data": {
+                    "email": email,
+                    "date": str(date.today()),
+                    "count": usage + 1
+                }
             }, headers=headers)
     except Exception as e:
         st.write("❌ Logging error:", e)
