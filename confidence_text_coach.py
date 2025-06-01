@@ -27,7 +27,7 @@ ACCESS_GRANTED = st.session_state.access_granted
 if ACCESS_GRANTED:
     st.sidebar.success("🌟 Premium Access Active")
     if st.sidebar.button("Cancel Membership"):
-        st.sidebar.warning("To cancel, email hello@yourbrand.com.")
+        st.sidebar.warning("To cancel, email markwestoncoach@gmail.com")
 else:
     st.sidebar.info("🔓 Free Version (2 daily attempts)")
     if "usage" in st.session_state:
