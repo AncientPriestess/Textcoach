@@ -152,3 +152,114 @@ if st.button("🔍 Analyze Message"):
 st.sidebar.markdown("---")
 st.sidebar.markdown("💎 [Upgrade for unlimited access](https://coachnofluff.gumroad.com/l/textcoach)")
 st.sidebar.markdown("📩 Questions? markwestoncoach@gmail.com")
+
+
+# ========== 🎨 Custom UI Styling and Enhancements ==========
+st.markdown("""
+<style>
+    /* Background and text styling */
+    body, .stApp {
+        background-color: #fff9f9;
+        color: #333;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    /* Input field styling */
+    .stTextInput input, .stTextArea textarea {
+        background-color: #fff;
+        color: #000;
+        border: 1px solid #d08aa4;
+        border-radius: 6px;
+    }
+
+    /* Button styling */
+    .stButton button {
+        background-color: #d08aa4;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 0.5em 1.2em;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+    .stButton button:hover {
+        background-color: #c76d96;
+    }
+
+    /* Sidebar improvement */
+    .sidebar .sidebar-content {
+        background-color: #fce4ec;
+    }
+
+    /* Layout padding tweaks to reduce scroll */
+    .main .block-container {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    /* Email success visual */
+    .email-valid {
+        color: green;
+        font-weight: bold;
+        font-size: 0.95em;
+        margin-top: -0.5em;
+        margin-bottom: 1em;
+    }
+</style>
+""", unsafe_allow_html=True)
+
+# OPTIONAL: Visual feedback for email input
+email = st.sidebar.text_input("📧 Enter your email (optional)")
+if email and "@" in email and "." in email:
+    st.sidebar.markdown('<div class="email-valid">✅ Email looks good!</div>', unsafe_allow_html=True)
+
+
+# ========== 🌗 Theme Toggle for Accessibility ==========
+theme = st.sidebar.radio("🌓 Choose Theme", ["Light", "Dark"])
+
+if theme == "Light":
+    st.markdown("""
+    <style>
+        body, .stApp {
+            background-color: #fff9f9;
+            color: #333;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+        .stTextInput input, .stTextArea textarea {
+            background-color: #fff;
+            color: #000;
+            border: 1px solid #d08aa4;
+        }
+        .stButton button {
+            background-color: #d08aa4;
+            color: white;
+        }
+        .stButton button:hover {
+            background-color: #c76d96;
+        }
+    </style>
+    """, unsafe_allow_html=True)
+
+elif theme == "Dark":
+    st.markdown("""
+    <style>
+        body, .stApp {
+            background-color: #121212;
+            color: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+        .stTextInput input, .stTextArea textarea {
+            background-color: #1e1e1e;
+            color: #fff;
+            border: 1px solid #555;
+        }
+        .stButton button {
+            background-color: #333;
+            color: #fff;
+        }
+        .stButton button:hover {
+            background-color: #555;
+        }
+    </style>
+    """, unsafe_allow_html=True)
