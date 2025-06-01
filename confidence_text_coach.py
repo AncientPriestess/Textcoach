@@ -74,7 +74,7 @@ if user_email and "@" in user_email and "." in user_email:
         unsafe_allow_html=True
     )
 
-
+st.sidebar.markdown("---")
 st.sidebar.title("🔐 Unlock Full Access")
 password = st.sidebar.text_input("Got a code? Enter it here:", type="password")
 
