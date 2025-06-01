@@ -48,7 +48,7 @@ st.markdown("""
 
 # ========== Sidebar UI ==========
 st.sidebar.title("🔐 Unlock Full Access")
-user_email = st.sidebar.text_input("Your email (for 2 free uses):")
+user_email = st.sidebar.text_input("Your email (for 5 free uses - No code required):")
 password = st.sidebar.text_input("Got a code? Enter it here:", type="password")
 
 if st.sidebar.button("Activate Access"):
@@ -78,10 +78,10 @@ if user_email:
         can_analyze = True
     elif not usage:
         can_analyze = True
-    elif int(usage["count"]) < 2:
+    elif int(usage["count"]) < 5:
         can_analyze = True
     else:
-        st.session_state.analysis_error = "🛑 You've reached your 2 free attempts. [Upgrade for unlimited access](https://coachnofluff.gumroad.com/l/textcoach)"
+        st.session_state.analysis_error = "🛑 You've reached your 5 free attempts. [Upgrade for unlimited access](https://coachnofluff.gumroad.com/l/textcoach)"
 
 # ========== Main UI ==========
 st.title("❤️‍🔥 Text Coach for Women")
@@ -157,7 +157,7 @@ submit = st.button("🔍 Analyze Message")
 if submit:
     if not user_email:
         st.error("Please enter your email to continue.")
-    elif not ACCESS_GRANTED and ("you:" in text_input.lower() or "him:" in text_input.lower() or text_input.count('\n') > 2):
+    elif not ACCESS_GRANTED and ("you:" in text_input.lower() or "him:" in text_input.lower() or text_input.count('\n') > 5):
         st.error("🛑 This looks like a thread. Upgrade for full conversation analysis.")
     elif can_analyze:
         with st.spinner("Analyzing..."):
