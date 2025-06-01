@@ -55,62 +55,72 @@ st.title("❤️‍🔥 Text Coach for Women")
 st.caption("Decode his message. Protect your peace. Respond with confidence.")
 st.markdown("Paste the **message** below:")
 
-# ✅ Only allow "Full Conversation" mode for access members
-if ACCESS_GRANTED:
-    mode = st.radio("Is this a single message or full conversation?", ["Single Message", "Full Conversation Thread"])
-else:
-    mode = "Single Message"
-    st.warning("🚨 Want the full breakdown? [Upgrade here](https://coachnofluff.gumroad.com/l/textcoach) to unlock full conversation analysis and get deeper insights into his patterns.")
+# ========== 👑 Message Mode Selection ==========
+st.markdown("**🔍 Select Message Type:**")
 
-# 📥 Message input
+col1, col2 = st.columns(2)
+with col1:
+    mode = st.radio(
+        "Choose format:",
+        ["Single Message", "Full Conversation Thread"],
+        disabled=not ACCESS_GRANTED,
+        index=0 if not ACCESS_GRANTED else None,
+        help=None if ACCESS_GRANTED else "Upgrade to unlock full conversation analysis"
+    )
+
+# ========== 📥 Message Input ==========
 text_input = st.text_area("📥 Message(s):", height=200)
 
-# ✅ Optional backstory (only for access members)
+# ========== 📝 Optional Context ==========
+st.markdown("**📝 Optional Context / Backstory:**")
+
 if ACCESS_GRANTED:
-    context_input = st.text_area("📝 Optional Context / Backstory (optional but helpful):", height=100)
+    context_input = st.text_area(
+        label="",
+        placeholder="Add any relevant context (e.g. how long you've been seeing him, recent arguments, etc.)",
+        height=100
+    )
 else:
+    st.text_area(
+        label="",
+        placeholder="🔒 Upgrade to unlock this field and share more details that make your analysis even sharper.",
+        height=100,
+        disabled=True
+    )
     context_input = ""
 
 # ========== 🤖 AI Logic ==========
-
-def analyze_text_and_generate_reply(text_input, is_thread=False):
+def analyze_text_and_generate_reply(text_input, context_input="", is_thread=False):
     style_reference = """
 Respond in this format and tone:
 
+👑 Coach’s Response
+
 Red Flag(s):
-[Point out behaviors like breadcrumbing, vague language, avoidance of commitment, etc. Use bold, blunt language. Example: “‘Let’s not label this’ is code for wanting perks without responsibility.”]
+[Point out vague language, avoidance of clarity, or emotional unavailability in bold, no-fluff terms.]
 
 Green Flag(s):
-[Only include if truly warranted — otherwise say: “None here. A man who knows what he wants doesn't dodge clarity.”]
+[Only if warranted. If none, say: “None here. A man who knows what he wants doesn’t dodge clarity.”]
 
 What This Means:
-[Interpret his intent — make it clear if he's unsure, playing games, or stringing her along. Focus on strategy, not confusion.]
+[Break down his intent — call out strategies disguised as confusion.]
 
 Suggested Reply:
-[Give her a confident, emotionally intelligent one-liner to respond or walk away — short, direct, and self-respecting.]
+[Give her a bold, confident one-liner — or recommend silence.]
 
 Final Word:
-[Empower her. Remind her of her worth. End with a confident truth bomb, not therapy fluff.]
+[Remind her of her worth. End with clarity and power — like a wake-up call.]
 """
 
-    if is_thread:
-        prompt = f"""
-You're a sharp, emotionally intelligent male dating coach with big brother energy. A woman just shared a full text thread from a guy.
+    prompt = f"""
+You're a sharp male dating coach with big brother energy. A woman received this message{' thread' if is_thread else ''} from a man:
 
-Decode his behavior using the style guide below. Speak directly to her. Don’t sugarcoat. Be concise, magnetic, and protective of her energy.
-
-Thread:
+Message:
 {text_input}
 
-{style_reference}
-"""
-    else:
-        prompt = f"""
-You're a sharp, emotionally intelligent male dating coach with big brother energy. A woman received this one message from a man:
+{f"Context / Backstory: {context_input}" if context_input else ""}
 
-{text_input}
-
-Decode his behavior using the style guide below. Speak directly to her. Don’t sugarcoat. Be concise, magnetic, and protective of her energy.
+Use the guide below and speak directly to her:
 
 {style_reference}
 """
@@ -118,9 +128,12 @@ Decode his behavior using the style guide below. Speak directly to her. Don’t 
     response = openai.chat.completions.create(
         model="gpt-4o",
         messages=[
-           {"role": "system", "content": "You are a seasoned male dating coach who breaks down manipulative behavior, red flags, and unclear dating messages using a bold, big-brother tone. You speak directly to women with clarity, protectiveness, and charisma. Your format includes 5 sections titled: Red Flag(s), Green Flag(s), What This Means, Suggested Reply, and Final Word — each written like a magnetic wake-up call."},
-            {"role": "user", "content": prompt}
-        ]
+            {
+                "role": "system",
+                "content": "You are a seasoned male dating coach who breaks down manipulative behavior, red flags, and unclear dating messages using a bold, big-brother tone. You speak directly to women with clarity, protectiveness, and charisma. Your format includes 5 sections: Red Flag(s), Green Flag(s), What This Means, Suggested Reply, and Final Word — each written like a magnetic wake-up call.",
+            },
+            {"role": "user", "content": prompt},
+        ],
     )
 
     return response.choices[0].message.content
@@ -129,7 +142,9 @@ Decode his behavior using the style guide below. Speak directly to her. Don’t 
 if st.button("🔍 Analyze Message"):
     if ACCESS_GRANTED or within_limit:
         with st.spinner("Analyzing..."):
-            result = analyze_text_and_generate_reply(text_input, is_thread=(mode == "Full Conversation Thread"))
+            result = analyze_text_and_generate_reply(
+                text_input, context_input, is_thread=(mode == "Full Conversation Thread")
+            )
             st.markdown("### 👑 Coach’s Response")
             st.write(result)
             if not ACCESS_GRANTED:
