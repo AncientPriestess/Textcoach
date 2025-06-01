@@ -92,8 +92,6 @@ def analyze_text_and_generate_reply(text_input, context_input="", is_thread=Fals
     style_reference = """
 Respond in this format and tone:
 
-👑 Coach’s Response
-
 Red Flag(s):
 [Call out breadcrumbing, vague language, avoidance of commitment, emotional distance, etc.]
 
