@@ -70,10 +70,9 @@ user_email = st.sidebar.text_input("Enter your email (for 5 free uses - No code 
 if user_email and "@" in user_email and "." in user_email:
     st.sidebar.markdown(
         f"""<div class='valid-input'>{user_email}</div>
-        <div class='success-note'>✅ You're good to go — paste the message below to get started.</div>""",
+        <div class='success-note'>✅ You're good to go! Free trial activated. </div>""",
         unsafe_allow_html=True
     )
-
 st.sidebar.markdown("---")
 st.sidebar.title("🔐 Unlock Full Access")
 password = st.sidebar.text_input("Got a code? Enter it here:", type="password")
