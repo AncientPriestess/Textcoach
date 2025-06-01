@@ -7,7 +7,7 @@ from datetime import datetime, date
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # ✅ Replace with your real SheetDB URL
-SHEET_API_URL = "https://sheetdb.io/api/v1/YOUR_SHEETDB_URL_HERE"
+SHEET_API_URL = "https://sheetdb.io/api/v1/rmm73p10teqed"
 
 # ========== 🔐 Premium Access Control ==========
 st.sidebar.title("🔐 Unlock Full Access")
