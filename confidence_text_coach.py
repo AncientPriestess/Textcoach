@@ -151,6 +151,21 @@ Use the format and tone below to respond directly to her — no fluff, just clar
         ],
     )
     return response.choices[0].message.content
+def is_thread_or_contextual_input(text):
+    text_lower = text.lower()
+
+    # Common phrases that indicate storytelling or paraphrased context
+    backstory_keywords = [
+        "he said", "i told him", "we’ve been", "we were", "he was", "he did", "he told", "he used to",
+        "i love", "he loves", "he stopped", "he started", "we talked", "he promised", "he acted", "i feel",
+        "i thought he", "then he", "because he", "he ghosted", "after that", "he responded", "ignored"
+    ]
+
+    # Sentence count check
+    sentence_count = text.count('.') + text.count('!') + text.count('?')
+    keyword_matches = sum(1 for kw in backstory_keywords if kw in text_lower)
+
+    return sentence_count > 2 or keyword_matches >= 2
 
 
 submit = st.button("🔍 Analyze Message")
@@ -158,7 +173,9 @@ submit = st.button("🔍 Analyze Message")
 if submit:
     if not user_email:
         st.error("Please enter your email to continue.")
-    elif not ACCESS_GRANTED and ("you:" in text_input.lower() or "him:" in text_input.lower() or text_input.count('\n') > 5):
+    elif not ACCESS_GRANTED and is_thread_or_contextual_input(text_input):
+        st.error("🛑 This looks like a backstory or paraphrased input. Free version only supports direct messages. Upgrade for full context analysis.")
+    elif not ACCESS_GRANTED and ("you:" in text_input.lower() or "him:" in text_input.lower() or text_input.count('\n') > 2):
         st.error("🛑 This looks like a thread. Upgrade for full conversation analysis.")
     elif can_analyze:
         with st.spinner("Analyzing..."):
