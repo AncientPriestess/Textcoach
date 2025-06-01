@@ -123,10 +123,10 @@ if st.button("🔍 Analyze Message"):
                 st.session_state.usage["count"] += 1
     else:
         st.error("You’ve reached your free limit today. Unlock full access to continue.")
-        st.markdown("🔓 [Upgrade here for unlimited access](https://your-gumroad-link.com)")
+        st.markdown("🔓 [Upgrade here for unlimited access](https://coachnofluff.gumroad.com/l/textcoach)")
 
 # ========== 💎 Sidebar Promotion ==========
 st.sidebar.markdown("---")
-st.sidebar.markdown("💎 [Upgrade for unlimited access](https://your-gumroad-link.com)")
-st.sidebar.markdown("📩 Questions? hello@yourbrand.com")
+st.sidebar.markdown("💎 [Upgrade for unlimited access](https://coachnofluff.gumroad.com/l/textcoach)")
+st.sidebar.markdown("📩 Questions? markwestoncoach@gmail.com")
 
