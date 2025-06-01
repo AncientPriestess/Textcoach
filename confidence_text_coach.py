@@ -97,30 +97,38 @@ Respond in this format and tone:
 👑 Coach’s Response
 
 Red Flag(s):
-[Point out vague language, avoidance of clarity, or emotional unavailability in bold, no-fluff terms.]
+[Call out breadcrumbing, vague language, avoidance of commitment, emotional distance, etc.]
 
 Green Flag(s):
-[Only if warranted. If none, say: “None here. A man who knows what he wants doesn’t dodge clarity.”]
+[Only mention if genuinely present. If not, say: “None here. A man who knows what he wants doesn’t dodge clarity.”]
 
 What This Means:
-[Break down his intent — call out strategies disguised as confusion.]
+[Explain what’s really going on. Be blunt but empowering.]
 
 Suggested Reply:
-[Give her a bold, confident one-liner — or recommend silence.]
+[Provide a confident, short response — or recommend silence.]
 
 Final Word:
-[Remind her of her worth. End with clarity and power — like a wake-up call.]
+[Reinforce her value and give her clarity. End with a truth bomb.]
 """
 
-    prompt = f"""
-You're a sharp male dating coach with big brother energy. A woman received this message{' thread' if is_thread else ''} from a man:
+    prompt_header = f"""
+You're a sharp male dating coach with big brother energy. A woman has shared a {'text thread' if is_thread else 'single message'} and wants your insight.
 
-Message:
+"""
+
+    if context_input.strip():
+        prompt_context = f"Here’s the backstory/context she provided:\n{context_input.strip()}\n\n"
+    else:
+        prompt_context = ""
+
+    full_prompt = f"""
+{prompt_header}
+{prompt_context}
+Here’s what she received:
 {text_input}
 
-{f"Context / Backstory: {context_input}" if context_input else ""}
-
-Use the guide below and speak directly to her:
+Use the format and tone below to respond directly to her — no fluff, just clarity and power.
 
 {style_reference}
 """
@@ -130,9 +138,9 @@ Use the guide below and speak directly to her:
         messages=[
             {
                 "role": "system",
-                "content": "You are a seasoned male dating coach who breaks down manipulative behavior, red flags, and unclear dating messages using a bold, big-brother tone. You speak directly to women with clarity, protectiveness, and charisma. Your format includes 5 sections: Red Flag(s), Green Flag(s), What This Means, Suggested Reply, and Final Word — each written like a magnetic wake-up call.",
+                "content": "You are a seasoned male dating coach who helps women spot emotional manipulation and respond with bold clarity. Use magnetic, concise language and always speak directly to her in 5 structured sections: Red Flag(s), Green Flag(s), What This Means, Suggested Reply, Final Word.",
             },
-            {"role": "user", "content": prompt},
+            {"role": "user", "content": full_prompt},
         ],
     )
 
