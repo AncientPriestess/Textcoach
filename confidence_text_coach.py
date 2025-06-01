@@ -60,7 +60,7 @@ if ACCESS_GRANTED:
     mode = st.radio("Is this a single message or full conversation?", ["Single Message", "Full Conversation Thread"])
 else:
     mode = "Single Message"
-    st.warning("🛑 Full conversation analysis is for premium users only. Unlock access to use this feature.")
+    st.warning("🚨 Want the full breakdown? [Upgrade here](https://coachnofluff.gumroad.com/l/textcoach) to unlock full conversation analysis and get deeper insights into his patterns.")
 
 # 📥 Message input
 text_input = st.text_area("📥 Message(s):", height=200)
