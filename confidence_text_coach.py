@@ -37,33 +37,47 @@ text_input = st.text_area("📥 Message(s):", height=200)
 
 # ========== 🤖 AI Logic ==========
 def analyze_text_and_generate_reply(text_input, is_thread=False):
+    style_reference = """
+Respond in this format and tone:
+
+👑 Coach’s Response
+
+Red Flag(s):
+[Point out behaviors like breadcrumbing, vague language, avoidance of commitment, etc. Use bold, blunt language. Example: “‘Let’s not label this’ is code for wanting perks without responsibility.”]
+
+Green Flag(s):
+[Only include if truly warranted — otherwise say: “None here. A man who knows what he wants doesn't dodge clarity.”]
+
+What This Means:
+[Interpret his intent — make it clear if he's unsure, playing games, or stringing her along. Focus on strategy, not confusion.]
+
+Suggested Reply:
+[Give her a confident, emotionally intelligent one-liner to respond or walk away — short, direct, and self-respecting.]
+
+Final Word:
+[Empower her. Remind her of her worth. End with a confident truth bomb, not therapy fluff.]
+"""
+
     if is_thread:
         prompt = f"""
-You're a respected male dating coach who helps women decode men's behavior and respond with confidence. A woman just shared a full text thread from a guy.
+You're a sharp, emotionally intelligent male dating coach with big brother energy. A woman just shared a full text thread from a guy.
 
-Speak to her directly, like a big brother who’s been around the block:
-- ✅ Call out any green flags
-- 🚩 Call out red flags (breadcrumbing, emotional distance, etc.)
-- 🎯 Tell her exactly what to say or do next — or if silence is the power move
-- Be concise, deep, and magnetic. No fluff. No therapy talk.
+Decode his behavior using the style guide below. Speak directly to her. Don’t sugarcoat. Be concise, magnetic, and protective of her energy.
 
-Here’s the thread:
+Thread:
 {text_input}
+
+{style_reference}
 """
     else:
         prompt = f"""
-You're a sharp male dating coach with big brother energy. A woman received this one message from a man:
+You're a sharp, emotionally intelligent male dating coach with big brother energy. A woman received this one message from a man:
 
 {text_input}
 
-Break it down for her clearly:
-- ✅ Spot green flags
-- 🚩 Spot red flags
-- 🧠 Interpret the intent based on tone, timing, and style
-- 💬 Suggest a powerful response (or recommend silence)
-- End by reminding her what she’s worth
+Decode his behavior using the style guide below. Speak directly to her. Don’t sugarcoat. Be concise, magnetic, and protective of her energy.
 
-Speak directly to her, not about her. Make it clear, empowering, and short.
+{style_reference}
 """
 
     response = openai.chat.completions.create(
@@ -75,7 +89,6 @@ Speak directly to her, not about her. Make it clear, empowering, and short.
     )
 
     return response.choices[0].message.content
-
 # ========== ✅ Handle Submit ==========
 if st.button("🔍 Analyze Message"):
     if ACCESS_GRANTED or within_limit:
