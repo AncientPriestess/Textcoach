@@ -158,7 +158,7 @@ def is_thread_or_contextual_input(text):
     backstory_keywords = [
         "he said", "i told him", "we’ve been", "we were", "he was", "he did", "he told", "he used to",
         "i love", "he loves", "he stopped", "he started", "we talked", "he promised", "he acted", "i feel",
-        "i thought he", "then he","him", "because he", "he ghosted", "after that", "he responded", "he ignored", "his"
+        "i thought he", "then he","him", "because he", "he ghosted", "after that", "he responded", "he ignored", "his", "he did", "he didn't", "he"
     ]
 
     # Sentence count check
