@@ -70,7 +70,6 @@ with col1:
 
 # ========== 📥 Message Input ==========
 text_input = st.text_area("📥 Message(s):", height=200)
-
 # ========== 📝 Optional Context ==========
 st.markdown("**📝 Optional Context / Backstory:**")
 
