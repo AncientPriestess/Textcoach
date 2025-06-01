@@ -3,11 +3,11 @@ import openai
 import requests
 from datetime import datetime, date
 
-# ✅ OpenAI API Key
+# ✅ Your OpenAI Key
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
-# ✅ Replace with your SheetDB endpoint
-SHEET_API_URL = "https://sheetdb.io/api/v1/rmm73p10teqed"
+# ✅ Your SheetDB URL (replace with yours)
+SHEET_API_URL = "https://sheetdb.io/api/v1/YOUR_SHEETDB_URL_HERE"
 
 # ========== 🔐 Premium Access ==========
 st.sidebar.title("🔐 Unlock Full Access")
@@ -26,7 +26,6 @@ if st.sidebar.button("Activate Access"):
 
 ACCESS_GRANTED = st.session_state.access_granted
 
-# Sidebar Status
 if ACCESS_GRANTED:
     st.sidebar.success("🌟 Premium Access Active")
     if st.sidebar.button("Cancel Membership"):
@@ -35,7 +34,7 @@ else:
     st.sidebar.info("🔓 Free Version (2 daily attempts)")
     st.sidebar.markdown("💎 [Upgrade here](https://coachnofluff.gumroad.com/l/textcoach)")
 
-# ========== 📧 Email for Free Users ==========
+# ========== 📧 Email (Free Users) ==========
 user_email = ""
 email_required = False
 
@@ -51,10 +50,10 @@ if not ACCESS_GRANTED:
     if user_email and email_required:
         st.error("Please enter a valid email address.")
 
-# ========== Usage Tracker ==========
-def get_user_usage(email):
+# ========== Usage Tracking ==========
+def get_user_usage(user_email):
     try:
-        response = requests.get(f"{SHEET_API_URL}/search?email={email}&date={date.today()}")
+        response = requests.get(f"{SHEET_API_URL}/search?email={user_email}&date={date.today()}")
         if response.status_code == 200:
             data = response.json()
             if isinstance(data, list) and len(data) > 0:
@@ -63,22 +62,20 @@ def get_user_usage(email):
     except:
         return 0
 
-def log_usage(email):
+def log_usage(user_email):
     try:
-        usage = get_user_usage(email)
+        current_usage = get_user_usage(user_email)
         headers = {"Content-Type": "application/json"}
+        today_str = str(date.today())
 
-        if usage == 0:
+        if current_usage == 0:
             requests.post(SHEET_API_URL, json={
-                "data": {"email": email, "date": str(date.today()), "count": 1}
+                "data": {"email": user_email, "date": today_str, "count": 1}
             }, headers=headers)
         else:
             requests.patch(f"{SHEET_API_URL}/search", json={
-                "data": {
-                    "email": email,
-                    "date": str(date.today()),
-                    "count": usage + 1
-                }
+                "data": {"count": current_usage + 1},
+                "search": {"email": user_email, "date": today_str}
             }, headers=headers)
     except Exception as e:
         st.write("❌ Logging error:", e)
@@ -88,8 +85,9 @@ st.title("❤️‍🔥 Text Coach for Women")
 st.caption("Decode his message. Protect your peace. Respond with confidence.")
 st.markdown("Paste the **message** below:")
 
-# ========== Message Type ==========
+# ========== Message Mode ==========
 st.markdown("**🔍 Select Message Type:**")
+
 col1, col2 = st.columns(2)
 with col1:
     mode = st.radio(
@@ -120,7 +118,7 @@ else:
 # ========== Message Input ==========
 text_input = st.text_area("📥 Type/paste his message(s) below:", height=200)
 
-# ========== AI Logic ==========
+# ========== AI Response Logic ==========
 def analyze_text_and_generate_reply(text_input, context_input="", is_thread=False):
     style_reference = """
 Respond in this format and tone:
@@ -144,7 +142,6 @@ Final Word:
 """
 
     prompt_header = f"You're a sharp male dating coach with big brother energy. A woman has shared a {'text thread' if is_thread else 'single message'} and wants your insight.\n\n"
-
     prompt_context = f"Here’s the backstory/context she provided:\n{context_input.strip()}\n\n" if context_input.strip() else ""
 
     full_prompt = f"""
@@ -207,7 +204,7 @@ if st.button("🔍 Analyze Message"):
             st.markdown("### 👑 Coach’s Response")
             st.write(result)
 
-# ========== Sidebar Promo ==========
+# ========== Sidebar Footer ==========
 st.sidebar.markdown("---")
 st.sidebar.markdown("💎 [Upgrade for unlimited access](https://coachnofluff.gumroad.com/l/textcoach)")
 st.sidebar.markdown("📩 Questions? markwestoncoach@gmail.com")
