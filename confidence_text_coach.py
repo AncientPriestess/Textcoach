@@ -1,4 +1,3 @@
-from http import client
 import streamlit as st
 import openai
 from datetime import datetime
@@ -38,58 +37,41 @@ text_input = st.text_area("📥 Message(s):", height=200)
 
 # ========== 🤖 AI Logic ==========
 def analyze_text_and_generate_reply(text_input, is_thread=False):
-    few_shot_examples = [
-        {
-            "role": "user",
-            "content": "wyd"
-        },
-        {
-            "role": "assistant",
-            "content": """\
-👑 Coach’s Response
+    if is_thread:
+        prompt = f"""
+You're a respected male dating coach who helps women decode men's behavior and respond with confidence. A woman just shared a full text thread from a guy.
 
-🚩 Red Flag(s): “wyd” is low-effort and vague. No context. No respect for your time. It’s usually a bait message — just enough to keep your attention without offering real connection.
+Speak to her directly, like a big brother who’s been around the block:
+- ✅ Call out any green flags
+- 🚩 Call out red flags (breadcrumbing, emotional distance, etc.)
+- 🎯 Tell her exactly what to say or do next — or if silence is the power move
+- Be concise, deep, and magnetic. No fluff. No therapy talk.
 
-✅ Green Flag(s): None.
+Here’s the thread:
+{text_input}
+"""
+    else:
+        prompt = f"""
+You're a sharp male dating coach with big brother energy. A woman received this one message from a man:
 
-🔍 What This Means: He’s either bored, testing access, or not emotionally invested. This kind of message often comes from guys who want attention on demand but avoid meaningful engagement.
+{text_input}
 
-🎯 Suggested Reply: “Busy right now. Let me know if there’s something real you wanted to talk about.”
+Break it down for her clearly:
+- ✅ Spot green flags
+- 🚩 Spot red flags
+- 🧠 Interpret the intent based on tone, timing, and style
+- 💬 Suggest a powerful response (or recommend silence)
+- End by reminding her what she’s worth
 
-Final Word: Don’t reward crumbs. You set the tone by showing your time isn’t free just because he’s bored."""
-        },
-        {
-            "role": "user",
-            "content": "let's not label this"
-        },
-        {
-            "role": "assistant",
-            "content": """\
-👑 Coach’s Response
+Speak directly to her, not about her. Make it clear, empowering, and short.
+"""
 
-🚩 Red Flag(s): “Let’s not label this” is classic commitment dodging. He’s making space for benefits without responsibility. Translation: “I want access, not accountability.”
-
-✅ Green Flag(s): None.
-
-🔍 What This Means: He’s not ready or willing to commit. This language keeps you emotionally hooked while giving him a back door to escape expectations. It's placeholder behavior.
-
-🎯 Suggested Reply: “I’m not in the business of unclear dynamics. If you’re not looking for something intentional, I’ll pass.”
-
-Final Word: Clarity is power. Don’t stick around hoping someone will step up — choose someone who already knows what they want (and it’s you)."""
-        }
-    ]
-
-    system_prompt = "You are a respected male dating coach. Your advice must be blunt, rooted in modern dating psychology, and protect the woman’s heart and value."
-
-    messages = [
-        {"role": "system", "content": system_prompt},
-        *few_shot_examples,
-        {"role": "user", "content": text_input}
-    ]
-
-    response = client.chat.completions.create(
+    response = openai.chat.completions.create(
         model="gpt-4-turbo",
-        messages=messages
+        messages=[
+            {"role": "system", "content": "You are a seasoned male dating coach who protects women from emotional manipulation and teaches them how to respond like queens."},
+            {"role": "user", "content": prompt}
+        ]
     )
 
     return response.choices[0].message.content
