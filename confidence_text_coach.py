@@ -8,7 +8,8 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 # ========== 🔒 Access Control ==========
 st.sidebar.title("🔐 Unlock Full Access")
 password = st.sidebar.text_input("Enter access code", type="password")
-ACCESS_GRANTED = (password == "textqueen2024")  # Change this to match your Gumroad unlock code
+ACCESS_GRANTED = (password == st.secrets["ACCESS_CODE"])
+
 
 # ========== 🧮 Daily Limit for Free Users ==========
 if "usage" not in st.session_state:
