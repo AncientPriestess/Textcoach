@@ -68,7 +68,7 @@ with col1:
         help=None if ACCESS_GRANTED else "Upgrade to unlock full conversation analysis"
     )
     # ========== 📝 Optional Context ==========
-st.text_area("📝 Optional Context / Backstory:")
+st.markdown("📝 Optional Context / Backstory:")
 if ACCESS_GRANTED:
     context_input = st.text_area(
         label="",
