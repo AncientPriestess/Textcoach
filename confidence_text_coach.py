@@ -140,7 +140,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 st.markdown("---")
-st.markdown("**Paste the message below:**")
+st.markdown("**Get started:**")
 
 mode = st.radio(
     "Choose format:",
