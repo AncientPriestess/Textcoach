@@ -3,23 +3,23 @@ import openai
 import requests
 import platform
 
-# ✅ Set Streamlit page config — MUST BE FIRST Streamlit command
+# ✅ This MUST be the first Streamlit command
 st.set_page_config(
     layout="centered",
     page_title="Relationship Text Coach for Women",
     page_icon="❤️‍🔥"
 )
 
-# ✅ Optional mobile notice after page config
+# ✅ THEN it's safe to call other Streamlit functions
+# Optional light mode suggestion for mobile
 if platform.system() in ["iOS", "Android"]:
     st.info("📱 For best results on mobile, switch to Light Mode in your browser settings.")
 
-# ✅ Configure your SheetDB API endpoint and OpenAI key from secrets
+# ✅ Load API keys from Streamlit secrets
 sheetdb_endpoint = st.secrets["SHEETDB_ENDPOINT"]
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # ========== App Style Settings ==========
-st.set_page_config(layout="centered", page_title="Relationship Text Coach for Women", page_icon="❤️‍🔥")
 
 # Inject custom CSS for modern card-style UI
 
