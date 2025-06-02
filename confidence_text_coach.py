@@ -200,14 +200,14 @@ ACCESS_GRANTED = st.session_state.get("access_granted", False)
 
 # ========== Free Usage Logic ==========
 def get_usage(email):
-    res = requests.get(f"{SHEETDB_ENDPOINT}/search?email={email}")
+    res = requests.get(f"{sheetdb_endpoint}/search?email={email}")
     data = res.json()
     return data[0] if data else None
 
 def log_usage(email, current_count):
-    requests.delete(f"{SHEETDB_ENDPOINT}/email/{email}")
+    requests.delete(f"{sheetdb_endpoint}/email/{email}")
     new_payload = {"data": [{"email": email, "count": current_count + 1}]}
-    requests.post(SHEETDB_ENDPOINT, json=new_payload)
+    requests.post(sheetdb_endpoint, json=new_payload)
 
 can_analyze = False
 if user_email:
