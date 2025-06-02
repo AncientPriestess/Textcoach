@@ -9,7 +9,7 @@ SHEETDB_ENDPOINT = "https://sheetdb.io/api/v1/rmm73p10teqed"
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # ========== App Style Settings ==========
-st.set_page_config(layout="centered", page_title="Text Coach for Women", page_icon="❤️‍🔥")
+st.set_page_config(layout="centered", page_title="Relationship Text Coach for Women", page_icon="❤️‍🔥")
 
 # Inject custom CSS for modern card-style UI
 st.markdown("""
