@@ -3,7 +3,7 @@ import openai
 import requests
 
 # ✅ Configure your SheetDB API
-SHEETDB_ENDPOINT = "https://sheetdb.io/api/v1/rmm73p10teqed"
+sheetdb_endpoint = st.secrets["SHEETDB_ENDPOINT"]
 
 # ✅ OpenAI API Key (configured in Streamlit secrets)
 openai.api_key = st.secrets["OPENAI_API_KEY"]
@@ -12,71 +12,105 @@ openai.api_key = st.secrets["OPENAI_API_KEY"]
 st.set_page_config(layout="centered", page_title="Relationship Text Coach for Women", page_icon="❤️‍🔥")
 
 # Inject custom CSS for modern card-style UI
+
 st.markdown("""
 <style>
-    html, body, [class*="css"] {
-        background-color: #f3f6fb !important;
-        font-family: 'Segoe UI', sans-serif;
-        color: #1e2a38;
-    }
-    .stTextArea textarea, .stTextInput input {
-        background-color: #ffffff !important;
-        border: 1px solid #cbd5e1 !important;
-        border-radius: 10px !important;
-        padding: 0.75rem !important;
-        font-size: 0.95rem !important;
-        box-shadow: none !important;
-    }
-    input:focus,
-textarea:focus {
-    border: 2px solid #2563eb !important; /* Your standard blue highlight */
+/* Responsive base for all screen sizes */
+html, body, [class*="css"] {
+    background-color: #f3f6fb !important;
+    font-family: 'Segoe UI', sans-serif;
+    color: #1e2a38;
+    margin: 0;
+    padding: 0;
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+/* Form elements */
+.stTextArea textarea, .stTextInput input {
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 10px !important;
+    padding: 0.75rem !important;
+    font-size: 1rem !important;
+    box-shadow: none !important;
+    width: 100% !important;
+}
+
+/* Focus states */
+input:focus, textarea:focus {
+    border: 2px solid #2563eb !important;
     outline: none !important;
     box-shadow: none !important;
 }
 
-input:focus:invalid,
-textarea:focus:invalid {
-    border: 1px solid #cbd5e1 !important;  /* Neutral fallback, NOT red */
+input:focus:invalid, textarea:focus:invalid,
+input:invalid, textarea:invalid {
+    border: 1px solid #cbd5e1 !important;
     box-shadow: none !important;
 }
 
-input:invalid,
-textarea:invalid {
-    border: 1px solid #cbd5e1 !important;  /* Removes red error border */
-    box-shadow: none !important;
+/* Buttons */
+.stButton>button {
+    background-color: #3b82f6 !important;
+    color: white !important;
+    border-radius: 10px !important;
+    height: 2.5rem !important;
+    font-weight: bold;
+    width: 100%;
+    max-width: 100%;
+}
+.stButton>button:hover {
+    background-color: #2563eb !important;
 }
 
-    .stButton>button {
-        background-color: #3b82f6 !important;
-        color: white !important;
-        border-radius: 10px !important;
-        height: 2.5rem !important;
-        font-weight: bold;
-    }
-    .stButton>button:hover {
-        background-color: #2563eb !important;
-    }
-    .stSidebar, .st-bp, .css-6qob1r, .block-container {
-        background-color: #e9eff8 !important;
-    }
-    .stRadio>div>div>label {
-        font-weight: 500;
-    }
+/* Sidebar and container background */
+.stSidebar, .st-bp, .css-6qob1r, .block-container {
+    background-color: #e9eff8 !important;
+}
+
+/* Radio labels */
+.stRadio>div>div>label {
+    font-weight: 500;
+}
+
+/* Valid input feedback */
 .valid-input input {
-    border: 2px solid #10b981 !important;       /* Green border for success */
-    background-color: #ffffff !important;        /* Ensure background is clean */
-    background-image: none !important;           /* Remove checkmark */
+    border: 2px solid #10b981 !important;
+    background-color: #ffffff !important;
     box-shadow: none !important;
 }
 
+/* Success note styling */
 .success-note {
     font-size: 0.85rem;
-    background-color: #10b981;                  /* Green background */
-    color: white;                                /* White text */
+    background-color: #10b981;
+    color: white;
     padding: 0.5rem 0.75rem;
     border-radius: 6px;
     margin-top: 0.5rem;
+    max-width: 100%;
 }
+
+/* Responsive adjustments for small screens */
+@media screen and (max-width: 600px) {
+    .stButton>button, .stTextArea textarea, .stTextInput input {
+        font-size: 0.95rem !important;
+        padding: 0.65rem !important;
+    }
+
+    .success-note {
+        font-size: 0.8rem;
+        padding: 0.5rem;
+    }
+
+    .stRadio>div {
+        flex-direction: column !important;
+    }
+
+    .stSidebar {
+        padding: 1rem !important;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
