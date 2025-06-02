@@ -13,20 +13,21 @@ st.set_page_config(layout="centered", page_title="Relationship Text Coach for Wo
 
 # Inject custom CSS for modern card-style UI
 
+
 st.markdown("""
 <style>
-/* Responsive base for all screen sizes */
+/* Base Styling */
 html, body, [class*="css"] {
-    background-color: #f3f6fb !important;
+    background-color: #ffffff !important;
     font-family: 'Segoe UI', sans-serif;
-    color: #1e2a38;
+    color: #1e293b !important;
     margin: 0;
     padding: 0;
     max-width: 100vw;
     overflow-x: hidden;
 }
 
-/* Form elements */
+/* Inputs */
 .stTextArea textarea, .stTextInput input {
     background-color: #ffffff !important;
     border: 1px solid #cbd5e1 !important;
@@ -34,10 +35,10 @@ html, body, [class*="css"] {
     padding: 0.75rem !important;
     font-size: 1rem !important;
     box-shadow: none !important;
-    width: 100% !important;
+    color: #1e293b !important;
 }
 
-/* Focus states */
+/* Focus States */
 input:focus, textarea:focus {
     border: 2px solid #2563eb !important;
     outline: none !important;
@@ -56,10 +57,11 @@ input:invalid, textarea:invalid {
     color: white !important;
     border-radius: 10px !important;
     height: 2.5rem !important;
-    font-weight: bold;
+    font-weight: bold !important;
     width: 100%;
     max-width: 100%;
 }
+
 .stButton>button:hover {
     background-color: #2563eb !important;
 }
@@ -69,19 +71,19 @@ input:invalid, textarea:invalid {
     background-color: #e9eff8 !important;
 }
 
-/* Radio labels */
+/* Radio buttons */
 .stRadio>div>div>label {
     font-weight: 500;
 }
 
-/* Valid input feedback */
+/* Valid Input styling */
 .valid-input input {
     border: 2px solid #10b981 !important;
     background-color: #ffffff !important;
     box-shadow: none !important;
 }
 
-/* Success note styling */
+/* Success note */
 .success-note {
     font-size: 0.85rem;
     background-color: #10b981;
@@ -92,24 +94,38 @@ input:invalid, textarea:invalid {
     max-width: 100%;
 }
 
-/* Responsive adjustments for small screens */
-@media screen and (max-width: 600px) {
-    .stButton>button, .stTextArea textarea, .stTextInput input {
-        font-size: 0.95rem !important;
-        padding: 0.65rem !important;
+/* Fix Caption + Subtext */
+div[style*="color: #6b7280"] {
+    color: #475569 !important;
+}
+
+/* Responsive mobile overrides */
+@media screen and (max-width: 768px) {
+    html, body, [class*="css"] {
+        font-size: 16px !important;
+        padding: 0 !important;
+        color: #1e293b !important;
+        background-color: #ffffff !important;
     }
 
-    .success-note {
-        font-size: 0.8rem;
-        padding: 0.5rem;
+    .stTextArea textarea, .stTextInput input {
+        font-size: 1rem !important;
+        padding: 0.75rem !important;
+        color: #1e293b !important;
     }
 
-    .stRadio>div {
+    .stRadio > div {
         flex-direction: column !important;
     }
 
-    .stSidebar {
-        padding: 1rem !important;
+    .block-container {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .success-note {
+        font-size: 0.8rem !important;
+        padding: 0.5rem !important;
     }
 }
 </style>
