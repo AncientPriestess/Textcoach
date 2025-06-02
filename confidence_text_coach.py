@@ -127,6 +127,28 @@ div[style*="color: #6b7280"] {
         font-size: 0.8rem !important;
         padding: 0.5rem !important;
     }
+   /* Force Streamlit light theme styles */
+@media (prefers-color-scheme: dark) {
+    html, body, [class*="css"] {
+        background-color: #ffffff !important;
+        color: #1e293b !important;
+    }
+
+    .stTextArea textarea, .stTextInput input {
+        background-color: #ffffff !important;
+        color: #1e293b !important;
+    }
+
+    .stButton>button {
+        background-color: #3b82f6 !important;
+        color: white !important;
+    }
+
+    .stSidebar, .st-bp, .css-6qob1r, .block-container {
+        background-color: #e9eff8 !important;
+    }
+}         
+
 }
 </style>
 """, unsafe_allow_html=True)
