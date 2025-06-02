@@ -130,7 +130,7 @@ if user_email:
 
 # ========== Main UI ==========
 st.title("❤️‍🔥 Text Coach for Women")
-st.caption("Decode his message. Protect your peace. Respond with confidence.")
+st.caption("*Decode his message. Protect your peace. Respond with confidence.*")
 
 st.markdown("**Paste the message below:**")
 
