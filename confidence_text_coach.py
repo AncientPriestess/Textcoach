@@ -4,8 +4,7 @@ import requests
 
 import streamlit as st
 import platform
-
-st.info("🌞 For best experience on mobile, switch to Light Mode in your browser or OS settings.")
+st.info("📱 For best results on mobile, switch to Light Mode in your browser settings.")
 
 # ✅ Configure your SheetDB API
 sheetdb_endpoint = st.secrets["SHEETDB_ENDPOINT"]
