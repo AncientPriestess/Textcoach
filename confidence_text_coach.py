@@ -1,10 +1,14 @@
 import streamlit as st
 import openai
 import requests
-
-import streamlit as st
 import platform
-st.info("📱 For best results on mobile, switch to Light Mode in your browser settings.")
+
+# ✅ Page config must come FIRST
+st.set_page_config(layout="centered", page_title="Relationship Text Coach for Women", page_icon="❤️‍🔥")
+
+# Optional info notice (AFTER page config)
+if platform.system() in ["iOS", "Android"]:
+    st.info("📱 For best results on mobile, switch to Light Mode in your browser settings.")
 
 # ✅ Configure your SheetDB API
 sheetdb_endpoint = st.secrets["SHEETDB_ENDPOINT"]
