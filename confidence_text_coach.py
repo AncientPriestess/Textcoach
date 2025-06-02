@@ -321,7 +321,7 @@ submit = st.button("🔍 Analyze Message")
 
 if submit:
     if not user_email:
-        st.error("Please enter your email to continue.")
+        st.error("Please enter your email on the left sidebar to continue. If on mobile, you might need to manually expand the sidebar on the left.")
     elif not ACCESS_GRANTED and is_thread_or_contextual_input(text_input):
         st.error("🛑 Looks like you're giving me the backstory — totally get it. But to give you a real analysis, I need his actual words, not the recap. The free version works best when you paste his exact message. Want me to look at the full situation? [Upgrade for full breakdown.](https://coachnofluff.gumroad.com/l/textcoach)")
     elif not ACCESS_GRANTED and ("you:" in text_input.lower() or "him:" in text_input.lower() or text_input.count('\n') > 2):
