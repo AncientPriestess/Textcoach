@@ -129,7 +129,7 @@ if user_email:
         st.session_state.analysis_error = "🛑 You've reached your 5 free attempts. [Upgrade for unlimited access](https://coachnofluff.gumroad.com/l/textcoach)"
 
 # ========== Main UI ==========
-st.title("❤️‍🔥 Relationship Text Coach for Women")
+st.title("❤️‍🔥 Text Coach for Women")
 st.caption("Decode his message. Protect your peace. Respond with confidence.")
 
 st.markdown("**Paste the message below:**")
