@@ -134,12 +134,12 @@ st.title("❤️‍🔥 Text Coach for Women")
 st.markdown(
     """
  <div style= font-size: 0.9rem; color: #6b7280;'>
-        <strong>Decode his message. Protect your peace. Respond with confidence.</strong>
+        <strong>*Decode his message. Protect your peace. Respond with confidence.*</strong>
    </div>
     """,
     unsafe_allow_html=True
 )
-
+st.sidebar.markdown("---")
 st.markdown("**Paste the message below:**")
 
 mode = st.radio(
