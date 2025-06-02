@@ -139,7 +139,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-st.sidebar.markdown("---")
+st.markdown("---")
 st.markdown("**Paste the message below:**")
 
 mode = st.radio(
