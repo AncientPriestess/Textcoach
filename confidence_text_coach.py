@@ -129,12 +129,17 @@ if user_email:
         st.session_state.analysis_error = "🛑 You've reached your 5 free attempts. [Upgrade for unlimited access](https://coachnofluff.gumroad.com/l/textcoach)"
 
 # ========== Main UI ==========
-"""
-<div style='text-align: center; font-size: 0.9rem; color: #6b7280;'>
 st.title("❤️‍🔥 Text Coach for Women")
-st.caption("**Decode his message. Protect your peace. Respond with confidence.**")
-</div>
-"""
+
+st.markdown(
+    """
+    <div style='text-align: center; font-size: 0.9rem; color: #6b7280;'>
+        <strong>Decode his message. Protect your peace. Respond with confidence.</strong>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 st.markdown("**Paste the message below:**")
 
 mode = st.radio(
