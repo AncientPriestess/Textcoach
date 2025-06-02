@@ -14,6 +14,8 @@ st.set_page_config(layout="centered", page_title="Relationship Text Coach for Wo
 # Inject custom CSS for modern card-style UI
 
 
+
+# ✅ CSS Styling with Mobile + Dark Mode Override
 st.markdown("""
 <style>
 /* Base Styling */
@@ -127,28 +129,41 @@ div[style*="color: #6b7280"] {
         font-size: 0.8rem !important;
         padding: 0.5rem !important;
     }
-   /* Force Streamlit light theme styles */
+}
+
+/* Force light theme on devices with dark/system settings */
 @media (prefers-color-scheme: dark) {
-    html, body, [class*="css"] {
+    html, body, .block-container, [data-testid="stAppViewContainer"] {
         background-color: #ffffff !important;
         color: #1e293b !important;
     }
 
-    .stTextArea textarea, .stTextInput input {
-        background-color: #ffffff !important;
+    h1, h2, h3, h4, h5, h6, p, span, div, label {
         color: #1e293b !important;
     }
 
-    .stButton>button {
+    input, textarea {
+        background-color: #ffffff !important;
+        color: #1e293b !important;
+        border: 1px solid #cbd5e1 !important;
+    }
+
+    label {
+        color: #1e293b !important;
+    }
+
+    button[kind="primary"], .stButton>button {
         background-color: #3b82f6 !important;
-        color: white !important;
+        color: #ffffff !important;
     }
 
-    .stSidebar, .st-bp, .css-6qob1r, .block-container {
+    .stSidebar, .css-6qob1r, .css-1d391kg, .css-1dp5vir {
         background-color: #e9eff8 !important;
     }
-}         
 
+    .stApp {
+        filter: invert(0%) hue-rotate(0deg) !important;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
